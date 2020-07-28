@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_subject_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Subject"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.313" />
+
+    <RadioGroup
+        android:id="@+id/rg_group"
+        android:layout_margin="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subject_name">
+
+        <RadioButton
+            android:id="@+id/rb_g1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="G1" />
+
+        <RadioButton
+            android:id="@+id/rb_g2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="G2" />
+
+    </RadioGroup>
+
+    <Spinner
+        android:id="@+id/sp_teacher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:entries="@array/branches"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.723"
+        app:layout_constraintStart_toEndOf="@+id/rg_group"
+        app:layout_constraintTop_toBottomOf="@+id/tv_subject_name"
+        app:layout_constraintVertical_bias="0.123" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

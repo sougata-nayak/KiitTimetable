@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "920166874282",
+    "firebase_url": "https://kiit-timetable-helper.firebaseio.com",
+    "project_id": "kiit-timetable-helper",
+    "storage_bucket": "kiit-timetable-helper.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920166874282:android:41c57f5a47dad77a3ca4d3",
+        "android_client_info": {
+          "package_name": "com.leodev.kiittimetable"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920166874282-i3b93aivakvrdobcnap6j2s0lcg4bu52.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhGidCDBVxDzxUV35Yi_GcbfLggn8drA8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920166874282-i3b93aivakvrdobcnap6j2s0lcg4bu52.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
