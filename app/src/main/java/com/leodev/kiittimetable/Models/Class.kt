@@ -3,7 +3,6 @@ package com.leodev.kiittimetable.Models
 import java.io.Serializable
 
 class Class : Serializable {
-    val id: Int? = null
     val name: String? = null
     val prof: String? = null
     val place: String? = null

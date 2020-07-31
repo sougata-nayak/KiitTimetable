@@ -1,0 +1,285 @@
+[
+  {
+    "subject_name": "Data Structure and Algorithms",
+    "academic_group": {
+      "G1": [
+        {
+          "day_of_week": 1,
+          "time": 11,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 2,
+          "time": 10,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 3,
+          "time": 10,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 9,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 1,
+          "time": 12,
+          "type": "lab"
+        }
+      ],
+      "G2": [
+        {
+          "day_of_week": 1,
+          "time": 16,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 3,
+          "time": 15,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 16,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 17,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 3,
+          "time": 16,
+          "type": "lab"
+        }
+      ]
+    }
+  },
+
+  {
+    "subject_name": "Object Oriented Programming",
+    "academic_group": {
+      "G1": [
+        {
+          "day_of_week": 2,
+          "time": 11,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 10,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 11,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 12,
+          "type": "lab"
+        }
+      ],
+      "G2": [
+        {
+          "day_of_week": 1,
+          "time": 17,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 2,
+          "time": 15,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 16,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 2,
+          "time": 16,
+          "type": "lab"
+        }
+      ]
+    }
+  },
+  {
+    "subject_name": "Probability and Statistics",
+    "academic_group": {
+      "G1": [
+        {
+          "day_of_week": 1,
+          "time": 8,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 2,
+          "time": 9,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 12,
+          "type": "theory"
+        }
+      ],
+      "G2": [
+        {
+          "day_of_week": 3,
+          "time": 9,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 13,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 8,
+          "type": "theory"
+        }
+      ]
+    }
+  },
+  {
+    "subject_name": "Discrete Mathematics",
+    "academic_group": {
+      "G1": [
+        {
+          "day_of_week": 1,
+          "time": 14,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 2,
+          "time": 8,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 3,
+          "time": 12,
+          "type": "theory"
+        }
+      ],
+      "G2": [
+        {
+          "day_of_week": 2,
+          "time": 14,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 3,
+          "time": 13,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 8,
+          "type": "theory"
+        }
+      ]
+    }
+  },
+  {
+    "subject_name": "Digital Electronic Circuits",
+    "academic_group": {
+      "G1": [
+        {
+          "day_of_week": 2,
+          "time": 13,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 3,
+          "time": 8,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 9,
+          "type": "theory"
+        }
+      ],
+      "G2": [
+        {
+          "day_of_week": 3,
+          "time": 14,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 15,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 15,
+          "type": "theory"
+        }
+      ]
+    }
+  },
+  {
+    "subject_name": "Economics",
+    "academic_group": {
+      "G1": [
+        {
+          "day_of_week": 1,
+          "time": 10,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 2,
+          "time": 12,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 3,
+          "time": 11,
+          "type": "theory"
+        }
+      ],
+      "G2": [
+        {
+          "day_of_week": 1,
+          "time": 9,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 11,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 10,
+          "type": "theory"
+        }
+      ],
+      "G3": [
+        {
+          "day_of_week": 1,
+          "time": 15,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 4,
+          "time": 14,
+          "type": "theory"
+        },
+        {
+          "day_of_week": 5,
+          "time": 14,
+          "type": "theory"
+        }
+      ]
+    }
+  }
+]
+

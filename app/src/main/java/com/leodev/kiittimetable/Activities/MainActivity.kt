@@ -34,7 +34,13 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         auth = FirebaseAuth.getInstance()
-        val jsonString = Util.getJsonFromAssets(applicationContext, "timetable.json");
+
+        createTimetable()
+    }
+
+    private fun createTimetable(){
+
+        val jsonString = Util.getJsonFromAssets(applicationContext, "timetable.json")
 
         val timetable : ArrayList<Class> = Gson().fromJson(
             jsonString,
@@ -74,31 +80,5 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-
-
-//    private fun startAlarm(isRepeat: Boolean) {
-//
-//        val time = SystemClock.elapsedRealtime() + 10 - System.currentTimeMillis()
-//        val manager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        val pendingIntent: PendingIntent
-//
-//        val myIntent: Intent = Intent(this@MainActivity, AlarmNotificationReceiver::class.java)
-//        pendingIntent = PendingIntent.getBroadcast(this, 0, myIntent, 0)
-//
-//
-//        if (!isRepeat)
-////            manager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, pendingIntent)
-//            manager.setExact(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 3000, pendingIntent)
-////            manager[AlarmManager.RTC,
-////                    System.currentTimeMillis() + 10000] = pendingIntent
-//        else
-//            manager.setRepeating(
-//                AlarmManager.RTC_WAKEUP,
-//                SystemClock.elapsedRealtime() + 1000,
-//                100 * 1000.toLong(),
-//                pendingIntent
-//            )
-//
-//    }
 
 }

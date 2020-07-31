@@ -6,22 +6,36 @@
     android:layout_height="match_parent"
     tools:context=".Activities.SelectionActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Year"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@+id/rg_year"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.441" />
+
     <RadioGroup
         android:id="@+id/rg_year"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.105">
+        app:layout_constraintVertical_bias="0.301">
 
         <RadioButton
             android:id="@+id/rb_yr1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="1st Year" />
 
         <RadioButton
@@ -43,37 +57,39 @@
             android:text="4th Year" />
     </RadioGroup>
 
-    <Spinner
-        android:id="@+id/sp_branch"
+
+    <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:text="Select Branch"
+        android:textSize="35sp"
+        app:layout_constraintBottom_toTopOf="@+id/sp_branch"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rg_year" />
+
+    <Spinner
+        android:id="@+id/sp_branch"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
         android:entries="@array/branches"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg_year"
-        app:layout_constraintVertical_bias="0.078" />
+        app:layout_constraintTop_toBottomOf="@+id/rg_year" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_subjects"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/bt_save_subjects"
+    <Button
+        android:id="@+id/bt_save_specs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Subjects"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sp_branch" />
 
-    <Button
-        android:id="@+id/bt_save_subjects"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Save Subjects"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

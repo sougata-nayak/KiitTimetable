@@ -20,10 +20,10 @@
 
     <RadioGroup
         android:id="@+id/rg_group"
-        android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_margin="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_subject_name">
@@ -32,6 +32,7 @@
             android:id="@+id/rb_g1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="G1" />
 
         <RadioButton
@@ -44,7 +45,7 @@
 
     <Spinner
         android:id="@+id/sp_teacher"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:entries="@array/branches"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -53,7 +54,6 @@
         app:layout_constraintStart_toEndOf="@+id/rg_group"
         app:layout_constraintTop_toBottomOf="@+id/tv_subject_name"
         app:layout_constraintVertical_bias="0.123" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

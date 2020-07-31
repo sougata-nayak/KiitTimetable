@@ -1,0 +1,43 @@
+{
+    "CSE": {
+      "CSE301": {
+        "subject_name": "Data Algorithm and Analysis",
+        "academic_group": {
+          "G1": [
+            {
+              "day_of_week": "Monday",
+              "time": "10:00:00",
+              "type": "theory"
+            },
+            {
+              "day_of_week": "Tuesday",
+              "time": "08:00:00",
+              "type": "theory"
+            },
+            {
+              "day_of_week": "Wednesday",
+              "time": "09:00:00",
+              "type": "theory"
+            }
+          ],
+          "G2": [
+            {
+              "day_of_week": "Wednesday",
+              "time": "10:00:00",
+              "type": "theory"
+            },
+            {
+              "day_of_week": "Thursday",
+              "time": "11:00:00",
+              "type": "theory"
+            },
+            {
+              "day_of_week": "Friday",
+              "time": "11:00:00",
+              "type": "theory"
+            }
+          ]
+        }
+      }
+    }
+  }
