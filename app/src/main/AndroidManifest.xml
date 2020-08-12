@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".Activities.MainActivity" />
 
-        <receiver android:name=".AlarmNotificationReceiver" />
+        <receiver android:name=".Utils.AlarmNotificationReceiver" />
     </application>
 
 </manifest>

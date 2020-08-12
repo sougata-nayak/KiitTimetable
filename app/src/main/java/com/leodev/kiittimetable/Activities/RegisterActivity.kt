@@ -3,6 +3,7 @@ package com.leodev.kiittimetable.Activities
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.leodev.kiittimetable.R
@@ -19,6 +20,10 @@ class RegisterActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
 
         bt_register.setOnClickListener {
+            et_email_register.visibility = View.INVISIBLE
+            et_password_register.visibility = View.INVISIBLE
+            bt_register.visibility = View.INVISIBLE
+            progressBar2.visibility = View.VISIBLE
             registerUser()
         }
     }
@@ -40,7 +45,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun checkLoggedInState() {
         if (auth.currentUser != null) { // logged in
-            startActivity(Intent(this, MainActivity::class.java))
+            startActivity(Intent(this, SelectionActivity::class.java))
         }
     }
 

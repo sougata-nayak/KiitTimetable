@@ -4,18 +4,16 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.leodev.kiittimetable.R
-import com.leodev.kiittimetable.SubjectTeachers
+import com.leodev.kiittimetable.Models.SubjectTeachers
 import kotlinx.android.synthetic.main.item_subjects.view.*
 
 class SubjectsAdapter (
     val subject_teachers : List<SubjectTeachers>,
     val context: Context
 ) : RecyclerView.Adapter<SubjectsAdapter.SubjectsViewHolder>() {
-
-    inner class SubjectsViewHolder(view : View) : RecyclerView.ViewHolder(view)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SubjectsViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_subjects, parent, false)
@@ -34,4 +32,6 @@ class SubjectsAdapter (
             sp_teacher.adapter = adapter
         }
     }
+
+    inner class SubjectsViewHolder(view : View) : RecyclerView.ViewHolder(view)
 }

@@ -1,4 +1,4 @@
-package com.leodev.kiittimetable
+package com.leodev.kiittimetable.Models
 
 import java.io.Serializable
 

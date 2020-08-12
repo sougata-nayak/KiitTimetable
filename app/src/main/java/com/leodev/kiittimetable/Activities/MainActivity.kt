@@ -1,21 +1,15 @@
 package com.leodev.kiittimetable.Activities
 
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.leodev.kiittimetable.Adapters.DaysPagerAdapter
-import com.leodev.kiittimetable.AlarmNotificationReceiver
 import com.leodev.kiittimetable.Models.Class
 import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.activity_main.*
@@ -25,6 +19,7 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     lateinit var auth : FirebaseAuth
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,8 +34,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createTimetable(){
-
-        val jsonString = Util.getJsonFromAssets(applicationContext, "timetable.json")
+        val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
+        val jsonString = sharedPref.getString("classes", Util.getJsonFromAssets(applicationContext, "timetable.json"))
 
         val timetable : ArrayList<Class> = Gson().fromJson(
             jsonString,

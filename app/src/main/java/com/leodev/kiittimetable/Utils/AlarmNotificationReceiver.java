@@ -1,4 +1,4 @@
-package com.leodev.kiittimetable;
+package com.leodev.kiittimetable.Utils;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.core.app.NotificationCompat;
+
+import com.leodev.kiittimetable.R;
 
 public class AlarmNotificationReceiver extends BroadcastReceiver {
     @Override
@@ -17,10 +19,10 @@ public class AlarmNotificationReceiver extends BroadcastReceiver {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Sex")
-                .setContentText("Varsha swain pussy")
+                .setContentTitle("Title")
+                .setContentText("Body")
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
-                .setContentInfo("condom");
+                .setContentInfo("Info");
 
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(1,builder.build());

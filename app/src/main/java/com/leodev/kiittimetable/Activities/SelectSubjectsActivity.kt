@@ -1,10 +1,13 @@
 package com.leodev.kiittimetable.Activities
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -12,13 +15,11 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.leodev.kiittimetable.Adapters.SubjectsAdapter
 import com.leodev.kiittimetable.Models.Class
 import com.leodev.kiittimetable.R
-import com.leodev.kiittimetable.SubjectTeachers
-import com.leodev.kiittimetable.Subjects
-import com.leodev.kiittimetable.TimetableSpecs
+import com.leodev.kiittimetable.Models.SubjectTeachers
+import com.leodev.kiittimetable.Models.TimetableSpecs
 import kotlinx.android.synthetic.main.activity_select_subjects.*
 import kotlinx.android.synthetic.main.item_subjects.view.*
 
@@ -27,10 +28,12 @@ class SelectSubjectsActivity : AppCompatActivity() {
     val database = Firebase.database
     val myRef = database.getReference("constant")
 
-    var subjects : ArrayList<SubjectTeachers> = arrayListOf()
-    var teachers : ArrayList<String> = arrayListOf()
+    var subjects : MutableList<SubjectTeachers> = arrayListOf()
+    var teachers : MutableList<String> = arrayListOf()
 
-    val timetableSpecs: ArrayList<TimetableSpecs> = arrayListOf()
+    val timetableSpecs: MutableList<TimetableSpecs> = arrayListOf()
+    val classDetails: MutableList<Class> = arrayListOf()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,17 +55,31 @@ class SelectSubjectsActivity : AppCompatActivity() {
         getSubjectsList(year, branch)
 
         bt_make_timetable.setOnClickListener {
-            for(i in 0 until subjects.size){
-                val view = rv_subjects.getChildAt(i)
+
+            rv_subjects.visibility = View.INVISIBLE
+            progressBar.visibility = View.VISIBLE
+            bt_make_timetable.visibility = View.INVISIBLE
+
+            Log.d("TAG", "onCreate:size $subjects")
+            // element ${rv_subjects[7].tv_subject_name.text.toString()}
+
+            for(i in 0 until subjects.size-1){
+                val view = rv_subjects[i]
                 val radioButton : RadioButton = findViewById(view.rg_group.checkedRadioButtonId)
 
-                val sub = view.tv_subject_name.toString()
+                val sub = view.tv_subject_name.text.toString()
                 val group = radioButton.text.toString()
                 val teacher = view.sp_teacher.selectedItem.toString()
-                timetableSpecs.add(TimetableSpecs(sub, group, teacher))
-            }
+                Log.d("TAG", "onCreate: $sub")
+                val g = TimetableSpecs(
+                    sub,
+                    group,
+                    teacher
+                )
+                timetableSpecs.add(g)
+                }
 
-            Log.d("TAG", "onCreate: $timetableSpecs")
+            createTimetableFromDetails(branch, year)
         }
     }
 
@@ -78,7 +95,13 @@ class SelectSubjectsActivity : AppCompatActivity() {
                     for(item in sp.child("teachers").children){
                         teachers.add(item.child("teacher_name").value.toString())
                     }
-                    subjects.add(SubjectTeachers(sp.child("subject_name").value.toString(), teachers))
+                    val t = teachers
+                    subjects.add(
+                        SubjectTeachers(
+                            sp.child("subject_name").value.toString(),
+                            t
+                        )
+                    )
                 }
                 setViews(subjects)
             }
@@ -98,24 +121,41 @@ class SelectSubjectsActivity : AppCompatActivity() {
         }
     }
 
-    fun createTimetableFromDetails(){
+    private fun createTimetableFromDetails(branch: String, year: String){
+        var i=0
 
-        val timeTable = mutableListOf<Class>()
+        myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {}
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (snaps in snapshot.children){
+                    val prof = timetableSpecs[i].teacher
+                    val sub = timetableSpecs[i].sub
 
-        val jsonString = Util.getJsonFromAssets(applicationContext, "cse2.json")
-        val subjectsList : ArrayList<Subjects> = Gson().fromJson(
-            jsonString,
-            object : TypeToken<ArrayList<Subjects>>() {}.type
-        )
+                    for (sp in snaps.child("academic_group").child(timetableSpecs[i].group).children){
+                        val day = sp.child("day_of_week").value.toString().toInt()
+                        val startTime = sp.child("time").value.toString().toInt()
+                        val type = sp.child("type").value.toString()
+                        val endTime = if (type == "theory") startTime+1 else startTime+2
 
-//        for (subjects in subjectsList ){
-//            Log.d("timetableAction", "SubjectName: ${subjects.subject_name}")
-//            for (sub in subjects.academic_group.G1){
-//                Log.d("timetableAction", "G1: $sub \n")
-//            }
-//            for (sub in subjects.academic_group.G2){
-//                Log.d("timetableAction", "G2: $sub \n")
-//            }
-//        }
+                        val a = Class(sub, prof, type, day, startTime, endTime)
+                        //Log.d("TAG", "onDataChange: $a")
+                        classDetails.add(a)
+                    }
+                    if(i < timetableSpecs.size-1){i++}
+                }
+
+                val timeTable = Gson().toJson(classDetails)
+                Log.d("TAG", "onDataChange: $timeTable")
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
+                val editor = sharedPref.edit()
+                editor.apply{
+                    putString("classes", timeTable)
+                    apply()
+                }
+                startActivity(intent)
+                finish()
+            }
+        })
     }
 }

@@ -1,5 +1,6 @@
-package com.leodev.kiittimetable
+package com.leodev.kiittimetable.Models
 
+import com.leodev.kiittimetable.Models.AcademicGroup
 import java.io.Serializable
 
 class Subjects : Serializable{
