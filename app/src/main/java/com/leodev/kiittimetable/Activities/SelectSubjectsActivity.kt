@@ -141,8 +141,8 @@ class SelectSubjectsActivity : AppCompatActivity() {
                     for (sp in snaps.child("academic_group").child(timetableSpecs[i].group).children){
                         val day = sp.child("day_of_week").value.toString().toInt()
                         val startTime = sp.child("time").value.toString().toInt()
-                        val type = sp.child("type").value.toString()
-                        val endTime = if (type == "theory") startTime+1 else startTime+2
+                        val type = sp.child("type").value.toString().capitalize()
+                        val endTime = if (type == "Theory") startTime+1 else startTime+2
 
                         val a = Class(sub, prof, type, day, startTime, endTime)
                         classDetails.add(a)
@@ -151,13 +151,14 @@ class SelectSubjectsActivity : AppCompatActivity() {
                 }
 
                 val timeTable = Gson().toJson(classDetails)
-                val intent = Intent(applicationContext, MainActivity::class.java)
                 val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
                 val editor = sharedPref.edit()
                 editor.apply{
                     putString("classes", timeTable)
                     apply()
                 }
+                val intent = Intent(this@SelectSubjectsActivity, MainActivity::class.java)
+                intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
             }
