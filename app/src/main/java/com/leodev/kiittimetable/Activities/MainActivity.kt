@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createTimetable(){
         val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
-        val jsonString = sharedPref.getString("classes", Util.getJsonFromAssets(applicationContext, "timetable.json"))
+        val jsonString = sharedPref.getString("classes", null)
 
         val timetable : ArrayList<Class> = Gson().fromJson(
             jsonString,
