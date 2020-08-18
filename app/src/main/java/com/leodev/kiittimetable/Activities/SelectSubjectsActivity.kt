@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
+import android.widget.Toast
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -22,13 +24,14 @@ import com.leodev.kiittimetable.Models.SubjectTeachers
 import com.leodev.kiittimetable.Models.TimetableSpecs
 import kotlinx.android.synthetic.main.activity_select_subjects.*
 import kotlinx.android.synthetic.main.item_subjects.view.*
-import java.util.*
 import kotlin.collections.ArrayList
 
 class SelectSubjectsActivity : AppCompatActivity() {
 
     val database = Firebase.database
     val myRef = database.getReference("const")
+    val db = database.getReference("users")
+    lateinit var auth: FirebaseAuth
 
     var subjects = arrayOfNulls<SubjectTeachers>(6)
     var teachers : ArrayList<String> = arrayListOf()
@@ -55,6 +58,8 @@ class SelectSubjectsActivity : AppCompatActivity() {
             else -> ""
         }
 
+        auth = FirebaseAuth.getInstance()
+
         getSubjectsList(year, branch)
 
         bt_make_timetable.setOnClickListener {
@@ -76,10 +81,30 @@ class SelectSubjectsActivity : AppCompatActivity() {
                     teacher
                 )
                 timetableSpecs.add(g)
-                }
+            }
+
+            storeUserData(timetableSpecs, branch, year)
 
             createTimetableFromDetails(branch, year)
         }
+    }
+
+    private fun storeUserData(
+        timetableSpecs: MutableList<TimetableSpecs>,
+        branch: String,
+        year: String
+    ) {
+        val em = auth.currentUser?.email!!
+        val email = em.substring(0, em.length-4)
+        try {
+            db.child(email).child("year").setValue(year)
+            db.child(email).child("branch").setValue(branch)
+            db.child(email).child("timetable").setValue(timetableSpecs)
+        }
+        catch (e : Exception){
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
+
     }
 
     private fun getSubjectsList(year: String, branch: String) {
