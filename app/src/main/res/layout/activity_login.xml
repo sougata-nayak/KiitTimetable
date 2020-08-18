@@ -58,4 +58,11 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/tv_forgot_password"/>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/loginProgressBar"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+
 </RelativeLayout>

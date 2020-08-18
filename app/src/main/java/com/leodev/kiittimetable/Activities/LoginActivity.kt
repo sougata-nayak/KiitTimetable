@@ -2,7 +2,9 @@ package com.leodev.kiittimetable.Activities
 
 import android.app.Activity
 import android.content.Intent
+import android.opengl.Visibility
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +30,7 @@ class LoginActivity : AppCompatActivity() {
         setupUI(findViewById(R.id.loginView))
 
         bt_login.setOnClickListener {
+            hideUI()
             loginUser()
         }
 
@@ -68,24 +71,44 @@ class LoginActivity : AppCompatActivity() {
         val password = et_password_login.text.toString()
         if (email.isNotEmpty() && password.isNotEmpty()) {
             try {
-                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                    checkLoggedInState()
-                }.addOnFailureListener {
-                    Toast.makeText(this@LoginActivity, "Login Failed, Retry", Toast.LENGTH_LONG).show()
-                }
+                auth.signInWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            val intent = Intent(this, MainActivity::class.java)
+                            intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            showUI()
+                            Toast.makeText(baseContext, "${task.exception?.message}",
+                                Toast.LENGTH_LONG).show()
+                        }
+                    }
             }
             catch (e: Exception) {
+                showUI()
                 Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun checkLoggedInState() {
-        if (auth.currentUser != null) { // logged in
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            startActivity(intent)
-            finish()
-        }
+    fun hideUI(){
+        bt_login.visibility = View.INVISIBLE
+        et_email_login.visibility = View.INVISIBLE
+        et_password_login.visibility = View.INVISIBLE
+        tv_forgot_password.visibility = View.INVISIBLE
+        tv_register.visibility = View.INVISIBLE
+        loginProgressBar.visibility = View.VISIBLE
+    }
+
+    fun showUI(){
+        bt_login.visibility = View.VISIBLE
+        et_email_login.visibility = View.VISIBLE
+        et_password_login.visibility = View.VISIBLE
+        tv_forgot_password.visibility = View.VISIBLE
+        tv_register.visibility = View.VISIBLE
+        loginProgressBar.visibility = View.GONE
     }
 }

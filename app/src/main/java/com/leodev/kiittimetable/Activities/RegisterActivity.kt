@@ -29,10 +29,7 @@ class RegisterActivity : AppCompatActivity() {
         setupUI(findViewById(R.id.registerView))
 
         bt_register.setOnClickListener {
-            et_email_register.visibility = View.INVISIBLE
-            et_password_register.visibility = View.INVISIBLE
-            bt_register.visibility = View.INVISIBLE
-            progressBar2.visibility = View.VISIBLE
+            hideUI()
             registerUser()
         }
     }
@@ -68,24 +65,40 @@ class RegisterActivity : AppCompatActivity() {
         val password = et_password_register.text.toString()
         if (email.isNotEmpty() && password.isNotEmpty()) {
             try {
-                auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-                    checkLoggedInState()
-                }
+                auth.createUserWithEmailAndPassword(email, password)
+                    .addOnCompleteListener(this) { task ->
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with the signed-in user's information
+                            val intent = Intent(this, SelectionActivity::class.java)
+                            intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            finish()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            showUI()
+                            Toast.makeText(baseContext, "${task.exception?.message}",
+                                Toast.LENGTH_LONG).show()
+                        }
+                    }
             }
             catch (e: Exception) {
+                showUI()
                 Toast.makeText(this@RegisterActivity, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }
 
-    private fun checkLoggedInState() {
-        if (auth.currentUser != null) { // logged in
-            startActivity(Intent(this, SelectionActivity::class.java))
-        }
+    fun hideUI(){
+        et_email_register.visibility = View.INVISIBLE
+        et_password_register.visibility = View.INVISIBLE
+        bt_register.visibility = View.INVISIBLE
+        registerProgressBar.visibility = View.VISIBLE
     }
 
-    override fun onStart() {
-        super.onStart()
-        checkLoggedInState()
+    fun showUI(){
+        et_email_register.visibility = View.VISIBLE
+        et_password_register.visibility = View.VISIBLE
+        bt_register.visibility = View.VISIBLE
+        registerProgressBar.visibility = View.INVISIBLE
     }
 }
