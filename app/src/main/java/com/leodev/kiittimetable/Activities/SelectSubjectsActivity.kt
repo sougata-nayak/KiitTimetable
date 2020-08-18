@@ -161,6 +161,7 @@ class SelectSubjectsActivity : AppCompatActivity() {
         myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener{
             override fun onCancelled(error: DatabaseError) {}
             override fun onDataChange(snapshot: DataSnapshot) {
+                classDetails.clear()
                 for (snaps in snapshot.children){
                     val prof = timetableSpecs[i].teacher
                     val sub = timetableSpecs[i].sub
