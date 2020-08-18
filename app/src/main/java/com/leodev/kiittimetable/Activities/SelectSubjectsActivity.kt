@@ -22,6 +22,8 @@ import com.leodev.kiittimetable.Models.SubjectTeachers
 import com.leodev.kiittimetable.Models.TimetableSpecs
 import kotlinx.android.synthetic.main.activity_select_subjects.*
 import kotlinx.android.synthetic.main.item_subjects.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class SelectSubjectsActivity : AppCompatActivity() {
 
@@ -149,6 +151,8 @@ class SelectSubjectsActivity : AppCompatActivity() {
                     }
                     if(i < timetableSpecs.size-1){i++}
                 }
+
+                classDetails.sortWith(kotlin.Comparator { p0, p1 -> (p0?.startTime?.minus((p1?.startTime)!!))!! })
 
                 val timeTable = Gson().toJson(classDetails)
                 val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
