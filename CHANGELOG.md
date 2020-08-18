@@ -1,4 +1,4 @@
-#Changelog
+# Changelog
 
 ## 0.1.1b
 1. Fixed an issue where Register button was not showing for some devices.
