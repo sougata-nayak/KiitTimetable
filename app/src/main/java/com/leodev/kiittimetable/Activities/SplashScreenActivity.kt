@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -35,18 +37,30 @@ class SplashScreenActivity : AppCompatActivity() {
     private fun checkLoggedInState() {
         if (auth.currentUser != null) { // logged in
 
+            Log.d("TAG", "checkLoggedInState: user not null")
+            Toast.makeText(this, "user not null", Toast.LENGTH_LONG).show()
+
             val email = auth.currentUser?.email!!
             val em = email.substring(0, email.length-4)
 
             val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
             val jsonString = sharedPref.getString("classes", null)
 
+
+
             if(jsonString != null){
+
+                Log.d("TAG", "checkLoggedInState: json not null")
+                Toast.makeText(this, "json not null", Toast.LENGTH_LONG).show()
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
-            }else if (db.child(em) != null){
+
+            }else{
+
+                Log.d("TAG", "checkLoggedInState: json null")
+                Toast.makeText(this, "json null", Toast.LENGTH_LONG).show()
                 db.child(em).addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {}
 
@@ -59,17 +73,26 @@ class SplashScreenActivity : AppCompatActivity() {
                             val teacher = items.child("teacher").value.toString()
                             timetableSpecs.add(TimetableSpecs(sub, group, teacher))
                         }
-                        createTimetable(branch, year, timetableSpecs)
+                        if(timetableSpecs.isEmpty()){
+                            Log.d("TAG", "checkLoggedInState: db null")
+                            Toast.makeText(this@SplashScreenActivity, "db null", Toast.LENGTH_LONG).show()
+                            val intent = Intent(this@SplashScreenActivity, SelectionActivity::class.java)
+                            intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            startActivity(intent)
+                            finish()
+                        }
+                        else{
+                            Log.d("TAG", "checkLoggedInState: db not null")
+                            Toast.makeText(this@SplashScreenActivity, "db not null", Toast.LENGTH_LONG).show()
+                            createTimetable(branch, year, timetableSpecs)
+                        }
                     }
                 })
-            }else{
-                val intent = Intent(this, SelectionActivity::class.java)
-                intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
             }
         }
         else{
+            Log.d("TAG", "checkLoggedInState: user null")
+            Toast.makeText(this, "user null", Toast.LENGTH_LONG).show()
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
