@@ -32,6 +32,10 @@ class RegisterActivity : AppCompatActivity() {
             hideUI()
             registerUser()
         }
+
+        goToLoginPageText.setOnClickListener {
+            finish()
+        }
     }
 
     fun setupUI(view: View) {
@@ -92,13 +96,16 @@ class RegisterActivity : AppCompatActivity() {
         et_email_register.visibility = View.INVISIBLE
         et_password_register.visibility = View.INVISIBLE
         bt_register.visibility = View.INVISIBLE
+        goToLoginPageText.visibility = View.INVISIBLE
         registerProgressBar.visibility = View.VISIBLE
+
     }
 
     fun showUI(){
         et_email_register.visibility = View.VISIBLE
         et_password_register.visibility = View.VISIBLE
         bt_register.visibility = View.VISIBLE
+        goToLoginPageText.visibility = View.VISIBLE
         registerProgressBar.visibility = View.INVISIBLE
     }
 }

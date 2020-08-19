@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
+import com.leodev.kiittimetable.ForgotPasswordActivity
 import com.leodev.kiittimetable.Models.Class
 import com.leodev.kiittimetable.Models.TimetableSpecs
 import com.leodev.kiittimetable.R
@@ -50,6 +51,10 @@ class LoginActivity : AppCompatActivity() {
 
         tv_register.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
+        }
+
+        tv_forgot_password.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
         }
     }
 
@@ -102,7 +107,15 @@ class LoginActivity : AppCompatActivity() {
                                         val teacher = items.child("teacher").value.toString()
                                         timetableSpecs.add(TimetableSpecs(sub, group, teacher))
                                     }
-                                    createTimetable(branch, year, timetableSpecs)
+                                    if(timetableSpecs.isEmpty()){
+                                        val intent = Intent(this@LoginActivity, SelectionActivity::class.java)
+                                        intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        startActivity(intent)
+                                        finish()
+                                    }
+                                    else{
+                                        createTimetable(branch, year, timetableSpecs)
+                                    }
                                 }
 
                             })
