@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -32,71 +34,72 @@ class SplashScreenActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         checkLoggedInState()
+
+
     }
 
     private fun checkLoggedInState() {
+        val account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+
         if (auth.currentUser != null) { // logged in
 
-            Log.d("TAG", "checkLoggedInState: user not null")
-            Toast.makeText(this, "user not null", Toast.LENGTH_LONG).show()
-
             val email = auth.currentUser?.email!!
-            val em = email.substring(0, email.length-4)
+            loginWhenUserNotNull(email)
+        }
+        else if (account != null){
 
-            val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
-            val jsonString = sharedPref.getString("classes", null)
-
-
-
-            if(jsonString != null){
-
-                Log.d("TAG", "checkLoggedInState: json not null")
-                Toast.makeText(this, "json not null", Toast.LENGTH_LONG).show()
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
-
-            }else{
-
-                Log.d("TAG", "checkLoggedInState: json null")
-                Toast.makeText(this, "json null", Toast.LENGTH_LONG).show()
-                db.child(em).addValueEventListener(object : ValueEventListener {
-                    override fun onCancelled(error: DatabaseError) {}
-
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        val branch = snapshot.child("branch").value.toString()
-                        val year = snapshot.child("year").value.toString()
-                        for(items in snapshot.child("timetable").children){
-                            val group = items.child("group").value.toString()
-                            val sub = items.child("sub").value.toString()
-                            val teacher = items.child("teacher").value.toString()
-                            timetableSpecs.add(TimetableSpecs(sub, group, teacher))
-                        }
-                        if(timetableSpecs.isEmpty()){
-                            Log.d("TAG", "checkLoggedInState: db null")
-                            Toast.makeText(this@SplashScreenActivity, "db null", Toast.LENGTH_LONG).show()
-                            val intent = Intent(this@SplashScreenActivity, SelectionActivity::class.java)
-                            intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            startActivity(intent)
-                            finish()
-                        }
-                        else{
-                            Log.d("TAG", "checkLoggedInState: db not null")
-                            Toast.makeText(this@SplashScreenActivity, "db not null", Toast.LENGTH_LONG).show()
-                            createTimetable(branch, year, timetableSpecs)
-                        }
-                    }
-                })
-            }
+            val email = account.email!!
+            loginWhenUserNotNull(email)
         }
         else{
-            Log.d("TAG", "checkLoggedInState: user null")
-            Toast.makeText(this, "user null", Toast.LENGTH_LONG).show()
             val intent = Intent(this, LoginActivity::class.java)
             intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
             finish()
+        }
+    }
+
+    private fun fixEmail(email: String): String {
+        return email.substring(0, email.indexOf("."))
+    }
+
+    private fun loginWhenUserNotNull(email: String) {
+
+        val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
+        val jsonString = sharedPref.getString("classes", null)
+
+        if(jsonString != null){
+
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+
+        }else{
+            val em = fixEmail(email)
+            db.child(em).addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {}
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val branch = snapshot.child("branch").value.toString()
+                    val year = snapshot.child("year").value.toString()
+                    for(items in snapshot.child("timetable").children){
+                        val group = items.child("group").value.toString()
+                        val sub = items.child("sub").value.toString()
+                        val teacher = items.child("teacher").value.toString()
+                        timetableSpecs.add(TimetableSpecs(sub, group, teacher))
+                    }
+                    if(timetableSpecs.isEmpty()){
+                        val intent = Intent(this@SplashScreenActivity, SelectionActivity::class.java)
+                        intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
+                    }
+                    else{
+                        createTimetable(branch, year, timetableSpecs)
+                    }
+                }
+            })
         }
     }
 

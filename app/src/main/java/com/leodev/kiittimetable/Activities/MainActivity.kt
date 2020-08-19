@@ -62,6 +62,12 @@ class MainActivity : AppCompatActivity() {
         when(item.itemId){
             R.id.mn_subjects -> startActivity(Intent(this, SelectionActivity::class.java))
             R.id.mn_signout -> {
+                val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
+                val editor = sharedPref.edit()
+                editor.apply{
+                    putString("classes", null)
+                    apply()
+                }
                 auth.signOut()
                 startActivity(Intent(this, LoginActivity::class.java).also {
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

@@ -1,4 +1,4 @@
-package com.leodev.kiittimetable
+package com.leodev.kiittimetable.Activities
 
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.activity_forgot_password.*
 
 class ForgotPasswordActivity : AppCompatActivity() {

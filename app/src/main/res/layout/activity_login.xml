@@ -49,7 +49,7 @@
         android:text="Forgot Password"
         android:layout_margin="16dp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/bt_login"/>
+        android:layout_below="@+id/btGoogleSignIn"/>
 
     <TextView
         android:id="@+id/tv_register"
@@ -67,5 +67,15 @@
         android:id="@+id/loginProgressBar"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
+
+    <com.google.android.gms.common.SignInButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btGoogleSignIn"
+        android:src="@mipmap/btn_google_signin_light_normal_web"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:layout_below="@+id/bt_login"/>
+
 
 </RelativeLayout>

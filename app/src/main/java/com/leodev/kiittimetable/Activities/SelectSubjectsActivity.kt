@@ -10,6 +10,8 @@ import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -94,8 +96,12 @@ class SelectSubjectsActivity : AppCompatActivity() {
         branch: String,
         year: String
     ) {
-        val em = auth.currentUser?.email!!
-        val email = em.substring(0, em.length-4)
+        var em = auth.currentUser?.email
+        if (em == null){
+            val account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
+            em = account?.email!!
+        }
+        val email = fixEmail(em)
         try {
             db.child(email).child("year").setValue(year)
             db.child(email).child("branch").setValue(branch)
@@ -105,6 +111,10 @@ class SelectSubjectsActivity : AppCompatActivity() {
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    private fun fixEmail(email: String): String {
+        return email.substring(0, email.indexOf("."))
     }
 
     private fun getSubjectsList(year: String, branch: String) {
@@ -133,10 +143,7 @@ class SelectSubjectsActivity : AppCompatActivity() {
                         9 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8]))
                         else -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8], t[9]))
                     }
-                    Log.d("TAG", "onDataChange: subjects ${subjects[i]} \n")
                 }
-                Log.d("TAG", "onDataChange: subjects 0  ${subjects[0]} \n")
-                Log.d("TAG", "onDataChange: subjects 1  ${subjects[1]} \n")
                 setViews(subjects)
             }
         })
