@@ -35,6 +35,7 @@
             android:id="@+id/rb_yr1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:checked="true"
             android:text="1st Year" />
 
@@ -42,18 +43,21 @@
             android:id="@+id/rb_yr2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="2nd Year" />
 
         <RadioButton
             android:id="@+id/rb_yr3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="3rd Year" />
 
         <RadioButton
             android:id="@+id/rb_yr4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:text="4th Year" />
     </RadioGroup>
 
