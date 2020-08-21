@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -50,6 +52,7 @@ class LoginActivity : AppCompatActivity() {
 
         val gso: GoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
+            .requestIdToken("920166874282-33g197co6i8rgtjoirt35theao9f9s91.apps.googleusercontent.com")
             .build()
         val mGoogleSignInClient: GoogleSignInClient = GoogleSignIn.getClient(this, gso)
 
@@ -119,7 +122,24 @@ class LoginActivity : AppCompatActivity() {
         try {
             val account = completedTask.getResult<ApiException>(ApiException::class.java)
             val email = account?.email!!
-            successfulSignIn(email)
+            val idToken = account.idToken
+            val credential = GoogleAuthProvider.getCredential(idToken, null)
+            Log.d("TAG", "handleSignInResult: $account \n $idToken \n $credential")
+
+            auth.signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        successfulSignIn(email)
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        showUI()
+                        Toast.makeText(
+                            baseContext, "${task.exception?.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+                }
 
         } catch (e: ApiException) {
             showUI()
