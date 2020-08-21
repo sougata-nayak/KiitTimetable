@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.view.get
+import androidx.core.view.iterator
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -70,13 +72,12 @@ class SelectSubjectsActivity : AppCompatActivity() {
             progressBar.visibility = View.VISIBLE
             bt_make_timetable.visibility = View.INVISIBLE
 
-            for(i in 0 until subjects.size){
-                val view = rv_subjects[i]
-                val radioButton : RadioButton = findViewById(view.rg_group.checkedRadioButtonId)
+            for(views in rv_subjects){
+                val radioButton : RadioButton = findViewById(views.rg_group.checkedRadioButtonId)
 
-                val sub = view.tv_subject_name.text.toString()
+                val sub = views.tv_subject_name.text.toString()
                 val group = radioButton.text.toString()
-                val teacher = view.sp_teacher.selectedItem.toString()
+                val teacher = views.sp_teacher.selectedItem.toString()
                 val g = TimetableSpecs(
                     sub,
                     group,
@@ -143,11 +144,25 @@ class SelectSubjectsActivity : AppCompatActivity() {
                     "group" to items.group,
                     "teacher" to items.teacher
                 )
-                timetableDB.add(timetable)
+                val code = getSubjectCode(items.sub)
+                timetableDB.document(code).set(timetable)
             }
         }
         catch (e : Exception){
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+            Log.d("TAG", "storeUserData: ${e.message}")
+        }
+    }
+
+    private fun getSubjectCode(sub: String): String {
+        return when(sub){
+            "Data Algorithm and Analysis" -> "CSE301"
+            "Computer Networking" -> "CSE302"
+            "High Performance Computing" -> "CSE303"
+            "Software Engineering" -> "CSE304"
+            "Artificial Intelligence/Cryptography" -> "CSE305"
+            "Data Mining and Data Warehouse/Big Data" -> "CSE306"
+            else -> ""
         }
     }
 
