@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +25,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.leodev.kiittimetable.Models.Class
@@ -37,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var auth: FirebaseAuth
     val database = Firebase.database
     val myRef = database.getReference("const")
-    val db = database.getReference("users")
+    val db = Firebase.firestore
 
     val timetableSpecs: MutableList<TimetableSpecs> = arrayListOf()
     val classDetails: MutableList<Class> = arrayListOf()
@@ -120,8 +122,7 @@ class LoginActivity : AppCompatActivity() {
     private fun handleSignInResult(completedTask: Task<GoogleSignInAccount>) {
         try {
             val account = completedTask.getResult<ApiException>(ApiException::class.java)
-            val email = account?.email!!
-            val idToken = account.idToken
+            val idToken = account?.idToken
             val credential = GoogleAuthProvider.getCredential(idToken, null)
 
             auth.signInWithCredential(credential)
@@ -150,16 +151,23 @@ class LoginActivity : AppCompatActivity() {
 
     private fun successfulSignIn(uid: String) {
 
-        db.child(uid).addValueEventListener(object : ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {}
+        var branch: String = ""
+        var year: String = ""
 
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val branch = snapshot.child("branch").value.toString()
-                val year = snapshot.child("year").value.toString()
-                for (items in snapshot.child("timetable").children) {
-                    val group = items.child("group").value.toString()
-                    val sub = items.child("sub").value.toString()
-                    val teacher = items.child("teacher").value.toString()
+        db.collection("users").document(uid)
+            .get()
+            .addOnSuccessListener {
+                branch = it.data?.get("branch").toString()
+                year = it.data?.get("year").toString()
+            }
+
+        db.collection("users").document(uid).collection("timetable")
+            .get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val teacher = document.data["teacher"].toString()
+                    val sub = document.data["subject"].toString()
+                    val group = document.data["group"].toString()
                     timetableSpecs.add(TimetableSpecs(sub, group, teacher))
                 }
                 if (timetableSpecs.isEmpty()) {
@@ -171,8 +179,6 @@ class LoginActivity : AppCompatActivity() {
                     createTimetable(branch, year, timetableSpecs)
                 }
             }
-
-        })
     }
 
     private fun createTimetable(

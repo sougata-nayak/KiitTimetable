@@ -4,19 +4,17 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.leodev.kiittimetable.Adapters.SubjectsAdapter
@@ -32,8 +30,9 @@ class SelectSubjectsActivity : AppCompatActivity() {
 
     val database = Firebase.database
     val myRef = database.getReference("const")
-    val db = database.getReference("users")
     lateinit var auth: FirebaseAuth
+
+    val db = Firebase.firestore
 
     var subjects = arrayOfNulls<SubjectTeachers>(6)
     var teachers : ArrayList<String> = arrayListOf()
@@ -131,10 +130,21 @@ class SelectSubjectsActivity : AppCompatActivity() {
     ) {
         val uid = auth.currentUser?.uid!!
         try {
-            db.child(uid).child("email").setValue(email)
-            db.child(uid).child("year").setValue(year)
-            db.child(uid).child("branch").setValue(branch)
-            db.child(uid).child("timetable").setValue(timetableSpecs)
+            val user = hashMapOf(
+                "email" to email,
+                "year" to year,
+                "branch" to branch
+            )
+            db.collection("users").document(uid).set(user)
+            val timetableDB = db.collection("users").document(uid).collection("timetable")
+            for(items in timetableSpecs){
+                val timetable = hashMapOf(
+                    "subject" to items.sub,
+                    "group" to items.group,
+                    "teacher" to items.teacher
+                )
+                timetableDB.add(timetable)
+            }
         }
         catch (e : Exception){
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
