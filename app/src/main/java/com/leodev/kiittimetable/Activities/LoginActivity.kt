@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -124,15 +123,13 @@ class LoginActivity : AppCompatActivity() {
             val email = account?.email!!
             val idToken = account.idToken
             val credential = GoogleAuthProvider.getCredential(idToken, null)
-            Log.d("TAG", "handleSignInResult: $account \n $idToken \n $credential")
 
             auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-                        successfulSignIn(email)
+                        successfulSignIn(auth.currentUser?.uid!!)
 
                     } else {
-                        // If sign in fails, display a message to the user.
                         showUI()
                         Toast.makeText(
                             baseContext, "${task.exception?.message}",
@@ -151,9 +148,9 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun successfulSignIn(email: String) {
-        val em = fixEmail(email)
-        db.child(em).addValueEventListener(object : ValueEventListener {
+    private fun successfulSignIn(uid: String) {
+
+        db.child(uid).addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -176,10 +173,6 @@ class LoginActivity : AppCompatActivity() {
             }
 
         })
-    }
-
-    private fun fixEmail(email: String): String {
-        return email.substring(0, email.indexOf("."))
     }
 
     private fun createTimetable(
@@ -236,7 +229,6 @@ class LoginActivity : AppCompatActivity() {
                 return false
             })
         }
-
         //If a layout container, iterate over children and seed recursion.
         if (view is ViewGroup) {
             for (i in 0 until view.childCount) {
@@ -245,7 +237,6 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
 
     private fun Activity.hideSoftKeyboard() {
         currentFocus?.let {
@@ -256,11 +247,6 @@ class LoginActivity : AppCompatActivity() {
             inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
-
-
-
-
-
 
     fun hideUI(){
         bt_login.visibility = View.INVISIBLE

@@ -6,8 +6,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -34,22 +32,14 @@ class SplashScreenActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         checkLoggedInState()
-
-
     }
 
     private fun checkLoggedInState() {
-        val account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
 
         if (auth.currentUser != null) { // logged in
 
-            val email = auth.currentUser?.email!!
-            loginWhenUserNotNull(email)
-        }
-        else if (account != null){
-
-            val email = account.email!!
-            loginWhenUserNotNull(email)
+            val uid = auth.currentUser?.uid!!
+            loginWhenUserNotNull(uid)
         }
         else{
             val intent = Intent(this, LoginActivity::class.java)
@@ -59,11 +49,7 @@ class SplashScreenActivity : AppCompatActivity() {
         }
     }
 
-    private fun fixEmail(email: String): String {
-        return email.substring(0, email.indexOf("."))
-    }
-
-    private fun loginWhenUserNotNull(email: String) {
+    private fun loginWhenUserNotNull(uid: String) {
 
         val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
         val jsonString = sharedPref.getString("classes", null)
@@ -76,8 +62,7 @@ class SplashScreenActivity : AppCompatActivity() {
             finish()
 
         }else{
-            val em = fixEmail(email)
-            db.child(em).addValueEventListener(object : ValueEventListener {
+            db.child(uid).addValueEventListener(object : ValueEventListener {
                 override fun onCancelled(error: DatabaseError) {}
 
                 override fun onDataChange(snapshot: DataSnapshot) {

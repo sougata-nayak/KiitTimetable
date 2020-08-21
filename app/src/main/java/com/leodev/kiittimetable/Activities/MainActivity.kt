@@ -2,10 +2,12 @@ package com.leodev.kiittimetable.Activities
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,7 +16,7 @@ import com.leodev.kiittimetable.Models.Class
 import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -64,11 +66,15 @@ class MainActivity : AppCompatActivity() {
             R.id.mn_signout -> {
                 val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
                 val editor = sharedPref.edit()
-                editor.apply{
+                editor.apply {
                     putString("classes", null)
                     apply()
                 }
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestEmail()
+                    .build()
                 auth.signOut()
+                GoogleSignIn.getClient(this, gso)?.signOut()
                 startActivity(Intent(this, LoginActivity::class.java).also {
                     it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

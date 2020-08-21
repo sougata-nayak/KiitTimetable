@@ -61,6 +61,7 @@ class SelectSubjectsActivity : AppCompatActivity() {
         }
 
         auth = FirebaseAuth.getInstance()
+        val email = auth.currentUser?.email!!
 
         getSubjectsList(year, branch)
 
@@ -85,43 +86,16 @@ class SelectSubjectsActivity : AppCompatActivity() {
                 timetableSpecs.add(g)
             }
 
-            storeUserData(timetableSpecs, branch, year)
+            storeUserData(timetableSpecs, branch, year, email)
 
             createTimetableFromDetails(branch, year)
         }
     }
 
-    private fun storeUserData(
-        timetableSpecs: MutableList<TimetableSpecs>,
-        branch: String,
-        year: String
-    ) {
-        var em = auth.currentUser?.email
-        if (em == null){
-            val account: GoogleSignInAccount? = GoogleSignIn.getLastSignedInAccount(this)
-            em = account?.email!!
-        }
-        val email = fixEmail(em)
-        try {
-            db.child(email).child("year").setValue(year)
-            db.child(email).child("branch").setValue(branch)
-            db.child(email).child("timetable").setValue(timetableSpecs)
-        }
-        catch (e : Exception){
-            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
-        }
-
-    }
-
-    private fun fixEmail(email: String): String {
-        return email.substring(0, email.indexOf("."))
-    }
-
     private fun getSubjectsList(year: String, branch: String) {
 
         myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-            }
+            override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 for((i, sp) in snapshot.children.withIndex()){
@@ -147,6 +121,24 @@ class SelectSubjectsActivity : AppCompatActivity() {
                 setViews(subjects)
             }
         })
+    }
+
+    private fun storeUserData(
+        timetableSpecs: MutableList<TimetableSpecs>,
+        branch: String,
+        year: String,
+        email: String
+    ) {
+        val uid = auth.currentUser?.uid!!
+        try {
+            db.child(uid).child("email").setValue(email)
+            db.child(uid).child("year").setValue(year)
+            db.child(uid).child("branch").setValue(branch)
+            db.child(uid).child("timetable").setValue(timetableSpecs)
+        }
+        catch (e : Exception){
+            Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun setViews(subjects: Array<SubjectTeachers?>) {
