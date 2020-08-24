@@ -59,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="4th Year" />
+
     </RadioGroup>
 
 
@@ -87,14 +88,14 @@
 
     <Button
         android:id="@+id/bt_save_specs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="114dp"
+        android:layout_height="43dp"
+        android:background="@drawable/button_background"
         android:text="Get Subjects"
+        android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sp_branch" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
