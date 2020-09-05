@@ -73,18 +73,35 @@ class SelectSubjectsActivity : AppCompatActivity() {
             bt_make_timetable.visibility = View.INVISIBLE
 
             for(views in rv_subjects){
-                val radioButton : RadioButton = findViewById(views.rg_group.checkedRadioButtonId)
 
+                val radioButton : RadioButton = findViewById(views.rg_group.checkedRadioButtonId)
                 val sub = views.tv_subject_name.text.toString()
                 val group = radioButton.text.toString()
                 val teacher = views.sp_teacher.selectedItem.toString()
                 val g = TimetableSpecs(
                     sub,
                     group,
-                    teacher
-                )
+                    teacher)
                 timetableSpecs.add(g)
             }
+
+//            for(i in 0 until rv_subjects.childCount){
+//
+//                val views = rv_subjects[i]
+//                val radioButton : RadioButton = findViewById(views.rg_group.checkedRadioButtonId)
+//
+//                val sub = views.tv_subject_name.text.toString()
+//                val group = radioButton.text.toString()
+//                val teacher = views.sp_teacher.selectedItem.toString()
+//                val g = TimetableSpecs(
+//                    sub,
+//                    group,
+//                    teacher
+//                )
+//                timetableSpecs.add(g)
+//            }
+
+            Log.d("TAG", "onCreate: $timetableSpecs")
 
             storeUserData(timetableSpecs, branch, year, email)
 
@@ -122,6 +139,19 @@ class SelectSubjectsActivity : AppCompatActivity() {
                 setViews(subjects)
             }
         })
+    }
+
+    private fun setViews(subjects: Array<SubjectTeachers?>) {
+
+        if (subjects.isNotEmpty()){
+            val adapter = SubjectsAdapter(subjects, this)
+            rv_subjects.adapter = adapter
+            rv_subjects.layoutManager = LinearLayoutManager(this)
+
+            rv_subjects.visibility = View.VISIBLE
+            progressBar.visibility = View.INVISIBLE
+            bt_make_timetable.visibility = View.VISIBLE
+        }
     }
 
     private fun storeUserData(
@@ -164,19 +194,6 @@ class SelectSubjectsActivity : AppCompatActivity() {
             "Artificial Intelligence/Cryptography" -> "CSE305"
             "Data Mining and Data Warehouse/Big Data" -> "CSE306"
             else -> ""
-        }
-    }
-
-    private fun setViews(subjects: Array<SubjectTeachers?>) {
-
-        if (subjects.isNotEmpty()){
-            val adapter = SubjectsAdapter(subjects, this)
-            rv_subjects.adapter = adapter
-            rv_subjects.layoutManager = LinearLayoutManager(this)
-
-            rv_subjects.visibility = View.VISIBLE
-            progressBar.visibility = View.INVISIBLE
-            bt_make_timetable.visibility = View.VISIBLE
         }
     }
 

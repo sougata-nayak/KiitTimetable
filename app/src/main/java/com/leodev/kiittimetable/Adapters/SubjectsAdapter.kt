@@ -31,6 +31,7 @@ class SubjectsAdapter(
             )
         }
 
+
         holder.itemView.apply {
             tv_subject_name.text = subject_teachers[position]?.sub
             sp_teacher.adapter = adapter

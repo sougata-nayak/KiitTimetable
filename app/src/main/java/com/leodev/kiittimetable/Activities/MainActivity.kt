@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken
 import com.leodev.kiittimetable.Adapters.DaysPagerAdapter
 import com.leodev.kiittimetable.Models.Class
 import com.leodev.kiittimetable.R
+import com.leodev.kiittimetable.ZoomLinkActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -151,6 +152,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.mn_subjects -> startActivity(Intent(this, SelectionActivity::class.java))
+
+            R.id.mn_zoom_links -> startActivity(Intent(this, ZoomLinkActivity::class.java))
 
             R.id.mn_notification -> {
 

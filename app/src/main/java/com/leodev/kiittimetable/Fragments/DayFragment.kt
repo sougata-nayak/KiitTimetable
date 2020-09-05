@@ -1,5 +1,6 @@
 package com.leodev.kiittimetable.Fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,13 +22,16 @@ class DayFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val day = arguments?.getInt(ARG_DAY)
         val timetable = arguments?.getSerializable(ARG_TIMETABLE)
+        val sharedPrefs = this.activity?.getSharedPreferences("zoom", Context.MODE_PRIVATE)
 
         if (day == null || timetable == null) return
 
         recycler.layoutManager = LinearLayoutManager(context)
         recycler.adapter = ClassesAdapter(
             day,
-            timetable as List<Class>
+            timetable as List<Class>,
+            sharedPrefs,
+            activity?.applicationContext
         )
     }
 
