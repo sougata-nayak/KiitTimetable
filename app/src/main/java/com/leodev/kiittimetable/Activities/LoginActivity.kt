@@ -124,14 +124,17 @@ class LoginActivity : AppCompatActivity() {
             val account = completedTask.getResult<ApiException>(ApiException::class.java)
             val idToken = account?.idToken
             val credential = GoogleAuthProvider.getCredential(idToken, null)
+            Log.d("TAG", "handleSignInResult: Signing in")
 
             auth.signInWithCredential(credential)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         successfulSignIn(auth.currentUser?.uid!!)
+                        Log.d("TAG", "handleSignInResult: Signing in pass")
 
                     } else {
                         showUI()
+                        Log.d("TAG", "handleSignInResult: Signing in fail")
                         Toast.makeText(
                             baseContext, "${task.exception?.message}",
                             Toast.LENGTH_LONG

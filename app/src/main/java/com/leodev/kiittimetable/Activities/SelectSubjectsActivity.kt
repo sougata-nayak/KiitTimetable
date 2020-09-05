@@ -95,7 +95,8 @@ class SelectSubjectsActivity : AppCompatActivity() {
     private fun getSubjectsList(year: String, branch: String) {
 
         myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) {
+            }
 
             override fun onDataChange(snapshot: DataSnapshot) {
                 for((i, sp) in snapshot.children.withIndex()){

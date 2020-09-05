@@ -8,6 +8,16 @@
         app:showAsAction="never"/>
 
     <item
+        android:id="@+id/mn_notification"
+        android:title="Get notified for classes"
+        app:showAsAction="never"/>
+
+    <item
+        android:id="@+id/mn_setAlarm"
+        android:title="Set Alarm for tomorrow's classes"
+        app:showAsAction="never"/>
+
+    <item
         android:id="@+id/mn_signout"
         android:title="Sign Out"
         app:showAsAction="never"/>
