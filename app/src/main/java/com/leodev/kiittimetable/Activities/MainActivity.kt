@@ -173,8 +173,6 @@ class MainActivity : AppCompatActivity() {
                             )
                             if (!timetable.isNullOrEmpty()) {
 
-                                Toast.makeText(this, "timetable not null", Toast.LENGTH_SHORT)
-                                    .show()
                                 Log.d("TAG", "onOptionsItemSelected: timetable not null")
 
                                 val calID = getCalendarId(this)
@@ -196,12 +194,7 @@ class MainActivity : AppCompatActivity() {
                                     putString("eventIdList", eventIds.toString())
                                     apply()
                                 }
-                            } else {
-                                Toast.makeText(this, "timetable null", Toast.LENGTH_SHORT).show()
-                                Log.d("TAG", "onOptionsItemSelected: timetable null")
                             }
-
-                            addEvent(1, "exercise", "workout", 7, 8, 2)
 
                             Toast.makeText(this, "Sync with calender success", Toast.LENGTH_SHORT)
                                 .show()
@@ -215,7 +208,6 @@ class MainActivity : AppCompatActivity() {
                     "Not yet",
                     DialogInterface.OnClickListener { dialog, id ->
                         dialog.cancel()
-                        Toast.makeText(this, "negative btn", Toast.LENGTH_SHORT).show()
                     })
 
                 val alert11: AlertDialog = builder1.create()
