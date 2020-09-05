@@ -11,11 +11,20 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="submit_details">SUBMIT DETAILS</string>
 
     <string-array name="branches">
         <item>CSE</item>
         <item>CSSE</item>
         <item>CSCE</item>
         <item>IT</item>
+    </string-array>
+    <string-array name="subjects">
+        <item>CN</item>
+        <item>HPCA</item>
+        <item>DMDW</item>
+        <item>AI</item>
+        <item>DAA</item>
+        <item>SE</item>
     </string-array>
 </resources>

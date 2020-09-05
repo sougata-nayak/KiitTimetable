@@ -24,6 +24,7 @@
         <activity android:name=".Activities.RegisterActivity" />
         <activity android:name=".Activities.LoginActivity" />
         <activity android:name=".Activities.MainActivity" />
+        <activity android:name=".Activities.zoomlinkActivity"/>
 
         <receiver android:name=".Utils.AlarmNotificationReceiver" />
     </application>

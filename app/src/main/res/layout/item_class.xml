@@ -79,6 +79,16 @@
             android:lines="1"
             android:textSize="14sp"
             tools:text="Place" />
+
+        <Button
+            android:id="@+id/directzoom"
+            android:layout_width="145dp"
+            android:layout_height="30dp"
+            android:background="@drawable/button_background"
+            android:text="DIRECT TO ZOOM "
+            android:textColor="#ffffff" />
+
+
     </LinearLayout>
 
 </LinearLayout>

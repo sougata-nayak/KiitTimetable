@@ -2,12 +2,15 @@ package com.leodev.kiittimetable.Activities
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Button
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
@@ -19,14 +22,14 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.leodev.kiittimetable.Adapters.SubjectsAdapter
 import com.leodev.kiittimetable.Models.Class
-import com.leodev.kiittimetable.R
 import com.leodev.kiittimetable.Models.SubjectTeachers
 import com.leodev.kiittimetable.Models.TimetableSpecs
+import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.activity_select_subjects.*
 import kotlinx.android.synthetic.main.item_subjects.view.*
-import kotlin.collections.ArrayList
 
 class SelectSubjectsActivity : AppCompatActivity() {
+
 
     val database = Firebase.database
     val myRef = database.getReference("const")
@@ -87,6 +90,7 @@ class SelectSubjectsActivity : AppCompatActivity() {
 
             createTimetableFromDetails(branch, year)
         }
+
     }
 
     private fun storeUserData(
@@ -95,13 +99,13 @@ class SelectSubjectsActivity : AppCompatActivity() {
         year: String
     ) {
         val em = auth.currentUser?.email!!
-        val email = em.substring(0, em.length-4)
+        val email = em.substring(0, em.length - 4)
         try {
             db.child(email).child("year").setValue(year)
             db.child(email).child("branch").setValue(branch)
             db.child(email).child("timetable").setValue(timetableSpecs)
         }
-        catch (e : Exception){
+        catch (e: Exception){
             Toast.makeText(this, e.message, Toast.LENGTH_LONG).show()
         }
 
@@ -109,29 +113,117 @@ class SelectSubjectsActivity : AppCompatActivity() {
 
     private fun getSubjectsList(year: String, branch: String) {
 
-        myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener{
+        myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                for((i, sp) in snapshot.children.withIndex()){
+                for ((i, sp) in snapshot.children.withIndex()) {
                     teachers.clear()
-                    for(item in sp.child("teachers").children){
+                    for (item in sp.child("teachers").children) {
                         teachers.add(item.child("teacher_name").value.toString())
                     }
                     t = teachers
-                    subjects[i] = when(t.size){
-                        0 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf())
-                        1 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0]))
-                        2 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1]))
-                        3 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2]))
-                        4 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3]))
-                        5 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4]))
-                        6 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4], t[5]))
-                        7 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4], t[5], t[6]))
-                        8 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7]))
-                        9 -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8]))
-                        else -> SubjectTeachers(sp.child("subject_name").value.toString(), arrayListOf(t[0], t[1], t[2], t[3], t[4], t[5], t[6], t[7], t[8], t[9]))
+                    subjects[i] = when (t.size) {
+                        0 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(),
+                            arrayListOf()
+                        )
+                        1 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0]
+                            )
+                        )
+                        2 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1]
+                            )
+                        )
+                        3 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2]
+                            )
+                        )
+                        4 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2],
+                                t[3]
+                            )
+                        )
+                        5 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2],
+                                t[3],
+                                t[4]
+                            )
+                        )
+                        6 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2],
+                                t[3],
+                                t[4],
+                                t[5]
+                            )
+                        )
+                        7 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2],
+                                t[3],
+                                t[4],
+                                t[5],
+                                t[6]
+                            )
+                        )
+                        8 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2],
+                                t[3],
+                                t[4],
+                                t[5],
+                                t[6],
+                                t[7]
+                            )
+                        )
+                        9 -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2],
+                                t[3],
+                                t[4],
+                                t[5],
+                                t[6],
+                                t[7],
+                                t[8]
+                            )
+                        )
+                        else -> SubjectTeachers(
+                            sp.child("subject_name").value.toString(), arrayListOf(
+                                t[0],
+                                t[1],
+                                t[2],
+                                t[3],
+                                t[4],
+                                t[5],
+                                t[6],
+                                t[7],
+                                t[8],
+                                t[9]
+                            )
+                        )
                     }
                     Log.d("TAG", "onDataChange: subjects ${subjects[i]} \n")
                 }
@@ -158,24 +250,27 @@ class SelectSubjectsActivity : AppCompatActivity() {
     private fun createTimetableFromDetails(branch: String, year: String){
         var i=0
 
-        myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener{
+        myRef.child(year).child(branch).addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
             override fun onDataChange(snapshot: DataSnapshot) {
                 classDetails.clear()
-                for (snaps in snapshot.children){
+                for (snaps in snapshot.children) {
                     val prof = timetableSpecs[i].teacher
                     val sub = timetableSpecs[i].sub
 
-                    for (sp in snaps.child("academic_group").child(timetableSpecs[i].group).children){
+                    for (sp in snaps.child("academic_group")
+                        .child(timetableSpecs[i].group).children) {
                         val day = sp.child("day_of_week").value.toString().toInt()
                         val startTime = sp.child("time").value.toString().toInt()
                         val type = sp.child("type").value.toString().capitalize()
-                        val endTime = if (type == "Theory") startTime+1 else startTime+2
+                        val endTime = if (type == "Theory") startTime + 1 else startTime + 2
 
                         val a = Class(sub, prof, type, day, startTime, endTime)
                         classDetails.add(a)
                     }
-                    if(i < timetableSpecs.size-1){i++}
+                    if (i < timetableSpecs.size - 1) {
+                        i++
+                    }
                 }
 
                 classDetails.sortWith(kotlin.Comparator { p0, p1 -> (p0?.startTime?.minus((p1?.startTime)!!))!! })
@@ -183,12 +278,12 @@ class SelectSubjectsActivity : AppCompatActivity() {
                 val timeTable = Gson().toJson(classDetails)
                 val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
                 val editor = sharedPref.edit()
-                editor.apply{
+                editor.apply {
                     putString("classes", timeTable)
                     apply()
                 }
                 val intent = Intent(this@SelectSubjectsActivity, MainActivity::class.java)
-                intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
                 finish()
             }

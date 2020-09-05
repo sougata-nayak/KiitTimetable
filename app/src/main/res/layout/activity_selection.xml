@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.441" />
 
+
     <RadioGroup
         android:id="@+id/rg_year"
         android:layout_width="match_parent"
@@ -29,7 +30,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.301">
+        app:layout_constraintVertical_bias="0.245">
 
         <RadioButton
             android:id="@+id/rb_yr1"
@@ -62,7 +63,6 @@
 
     </RadioGroup>
 
-
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
@@ -71,20 +71,23 @@
         android:textSize="35sp"
         app:layout_constraintBottom_toTopOf="@+id/sp_branch"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg_year" />
+        app:layout_constraintTop_toBottomOf="@+id/rg_year"
+        app:layout_constraintVertical_bias="0.409" />
 
     <Spinner
         android:id="@+id/sp_branch"
         android:layout_width="150dp"
         android:layout_height="40dp"
-        android:textAlignment="center"
         android:entries="@array/branches"
+        android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.54"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rg_year" />
+        app:layout_constraintTop_toBottomOf="@+id/rg_year"
+        app:layout_constraintVertical_bias="0.455" />
 
     <Button
         android:id="@+id/bt_save_specs"
@@ -95,7 +98,9 @@
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.538"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sp_branch" />
+        app:layout_constraintTop_toBottomOf="@+id/sp_branch"
+        app:layout_constraintVertical_bias="0.53" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

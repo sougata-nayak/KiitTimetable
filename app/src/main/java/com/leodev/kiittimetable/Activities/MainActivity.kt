@@ -2,10 +2,14 @@ package com.leodev.kiittimetable.Activities
 
 import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -14,7 +18,6 @@ import com.leodev.kiittimetable.Models.Class
 import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -61,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.mn_subjects -> startActivity(Intent(this, SelectionActivity::class.java))
+            R.id.mn_zoomlink -> startActivity(Intent(this,zoomlinkActivity::class.java))
             R.id.mn_signout -> {
                 auth.signOut()
                 startActivity(Intent(this, LoginActivity::class.java).also {
@@ -69,6 +73,8 @@ class MainActivity : AppCompatActivity() {
                 })
                 finish()
             }
+
+
         }
         return true
     }
