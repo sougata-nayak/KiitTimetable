@@ -6,6 +6,7 @@ import android.text.util.Linkify;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -21,13 +22,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static android.content.SharedPreferences.*;
+
 public class zoomlinkActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private List<String> list;
     private ZoomAdapter adapter;
+    private Object Editor;
 
-    private Button submitDetails;
+    private EditText linkEditText;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,8 +45,12 @@ public class zoomlinkActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter((RecyclerView.Adapter) adapter);
 
-        
 
+        SharedPreferences sharedPreferences=getSharedPreferences("Zoom Links",MODE_PRIVATE);
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        View rvItem;
+        for(int i=0;i<recyclerView.getChildCount();i++){
 
+        }
     }
 }
