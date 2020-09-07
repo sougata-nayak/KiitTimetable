@@ -54,8 +54,11 @@ class ClassesAdapter(val day: Int, classes: List<Class>,val sharedPrefs: SharedP
                     it.context.startActivity(intent)
                 }
                 catch (e: Exception){
-                    Toast.makeText(context, "Please re-check your link", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, e.message, Toast.LENGTH_LONG).show()
                 }
+            }
+            else{
+                Toast.makeText(context, "Link not available", Toast.LENGTH_LONG).show()
             }
         }
 

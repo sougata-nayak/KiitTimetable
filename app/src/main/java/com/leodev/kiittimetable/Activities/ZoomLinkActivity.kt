@@ -1,4 +1,4 @@
-package com.leodev.kiittimetable
+package com.leodev.kiittimetable.Activities
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
@@ -6,11 +6,20 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.leodev.kiittimetable.Adapters.ZoomAdapter
+import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.activity_zoom_link.*
 import kotlinx.android.synthetic.main.item_zoom_links.view.*
 
 class ZoomLinkActivity : AppCompatActivity() {
+
+    val db = Firebase.firestore
+    val auth = FirebaseAuth.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_zoom_link)
@@ -33,10 +42,17 @@ class ZoomLinkActivity : AppCompatActivity() {
             rv_zoom_links.children.iterator().forEach {
                 Log.d("TAG", "onCreate: ${it.tv_zoom_subject_name.text.toString()} -> ${it.zoom_link.text.toString()}")
 
+                val link = it.zoom_link.text.toString()
+                val code = getSubjectCode(it.tv_zoom_subject_name.text.toString())
                 editor.apply{
-                    putString(getSubjectCode(it.tv_zoom_subject_name.text.toString()), it.zoom_link.text.toString())
+                    putString(code, link)
                     apply()
                 }
+
+                val uid = auth.currentUser?.uid!!
+                val info = hashMapOf("link" to link)
+                val timetableDB = db.collection("users").document(uid).collection("timetable")
+                timetableDB.document(code).set(info, SetOptions.merge())
             }
             finish()
         }
