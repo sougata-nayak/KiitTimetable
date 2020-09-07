@@ -90,8 +90,6 @@ class MainActivity : AppCompatActivity() {
 
 
     fun addEvent(calID: Long ,title: String, desc: String, startTime: Int, endTime: Int, dayOfWeek: Int){
-        //val calID: Long = 1
-
         Log.d("TAG", "userSupplied: calID:$calID title:$title desc:$desc startTime:$startTime endTime:$endTime dayOfWeek:$dayOfWeek")
 
         val day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK)
@@ -154,95 +152,103 @@ class MainActivity : AppCompatActivity() {
 
             R.id.mn_zoom_links -> startActivity(Intent(this, ZoomLinkActivity::class.java))
 
-            R.id.mn_notification -> {
+            R.id.mn_notification -> createAlertDialogForNotification()
 
-                val builder1: AlertDialog.Builder = AlertDialog.Builder(this)
-                builder1.setTitle("Get notified for classes?")
-                builder1.setMessage("Your classes schedule will be synced with google calender and you will be notified for each class")
-                builder1.setCancelable(true)
+            R.id.mn_setAlarm -> setupAlarm()
 
-                builder1.setPositiveButton(
-                    "Get notified",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        try {
-
-                            val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
-                            val jsonString = sharedPref.getString("classes", null)
-
-                            val timetable: ArrayList<Class> = Gson().fromJson(
-                                jsonString,
-                                object : TypeToken<ArrayList<Class>>() {}.type
-                            )
-                            if (!timetable.isNullOrEmpty()) {
-
-                                Log.d("TAG", "onOptionsItemSelected: timetable not null")
-
-                                val calID = getCalendarId(this)
-                                for (myClass in timetable) {
-
-                                    addEvent(
-                                        1,
-                                        myClass.name!!,
-                                        myClass.place + " by " + myClass.prof,
-                                        myClass.startTime!!,
-                                        myClass.endTime!!,
-                                        myClass.day!!+1
-                                    )
-                                }
-                                val sharedPrefs =
-                                    getSharedPreferences("events", Context.MODE_PRIVATE)
-                                val editor = sharedPrefs.edit()
-                                editor.apply {
-                                    putString("eventIdList", eventIds.toString())
-                                    apply()
-                                }
-                            }
-
-                            Toast.makeText(this, "Sync with calender success", Toast.LENGTH_SHORT)
-                                .show()
-                        } catch (e: Exception) {
-                            Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
-                        }
-                        dialog.cancel()
-                    })
-
-                builder1.setNegativeButton(
-                    "Not yet",
-                    DialogInterface.OnClickListener { dialog, id ->
-                        dialog.cancel()
-                    })
-
-                val alert11: AlertDialog = builder1.create()
-                alert11.show()
-
-            }
-
-            R.id.mn_setAlarm -> {
-                val openClockIntent = Intent(AlarmClock.ACTION_SET_ALARM)
-                openClockIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                applicationContext.startActivity(openClockIntent)
-            }
-
-            R.id.mn_signout -> {
-                val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
-                val editor = sharedPref.edit()
-                editor.apply {
-                    putString("classes", null)
-                    apply()
-                }
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestEmail()
-                    .build()
-                auth.signOut()
-                GoogleSignIn.getClient(this, gso)?.signOut()
-                startActivity(Intent(this, LoginActivity::class.java).also {
-                    it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                })
-                finish()
-            }
+            R.id.mn_signout -> signout()
         }
         return true
+    }
+
+    private fun setupAlarm() {
+        val openClockIntent = Intent(AlarmClock.ACTION_SET_ALARM)
+        openClockIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        applicationContext.startActivity(openClockIntent)
+    }
+
+    private fun createAlertDialogForNotification() {
+        val builder1: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder1.setTitle("Get notified for classes?")
+        builder1.setMessage("Your classes schedule will be synced with google calender and you will be notified for each class")
+        builder1.setCancelable(true)
+
+        builder1.setPositiveButton(
+            "Get notified",
+            DialogInterface.OnClickListener { dialog, id ->
+                try {
+                    saveEventsToCalendar()
+
+                } catch (e: Exception) {
+                    Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
+                }
+                dialog.cancel()
+            })
+
+        builder1.setNegativeButton(
+            "Not yet",
+            DialogInterface.OnClickListener { dialog, id ->
+                dialog.cancel()
+            })
+
+        val alert11: AlertDialog = builder1.create()
+        alert11.show()
+    }
+
+    private fun saveEventsToCalendar() {
+        val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
+        val jsonString = sharedPref.getString("classes", null)
+
+        val timetable: ArrayList<Class> = Gson().fromJson(
+            jsonString,
+            object : TypeToken<ArrayList<Class>>() {}.type
+        )
+        if (!timetable.isNullOrEmpty()) {
+
+            Log.d("TAG", "onOptionsItemSelected: timetable not null")
+
+            val calID = getCalendarId(this)
+            for (myClass in timetable) {
+
+                addEvent(
+                    1,
+                    myClass.name!!,
+                    myClass.place + " by " + myClass.prof,
+                    myClass.startTime!!,
+                    myClass.endTime!!,
+                    myClass.day!!+1
+                )
+            }
+            val sharedPrefs =
+                getSharedPreferences("events", Context.MODE_PRIVATE)
+            val editor = sharedPrefs.edit()
+            editor.apply {
+                putString("eventIdList", eventIds.toString())
+                apply()
+            }
+        }
+
+        Toast.makeText(this, "Sync with calender success", Toast.LENGTH_SHORT)
+            .show()
+    }
+
+    private fun signout() {
+        val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
+        val editor = sharedPref.edit()
+        editor.apply {
+            putString("classes", null)
+            apply()
+        }
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+        auth.signOut()
+        GoogleSignIn.getClient(this, gso)?.signOut()
+        startActivity(Intent(this, LoginActivity::class.java).also {
+            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        })
+        finish()
     }
 
     private fun getCalendarId(context: Context) : Long {
