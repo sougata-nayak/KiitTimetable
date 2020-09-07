@@ -46,6 +46,8 @@ class ClassesAdapter(val day: Int, classes: List<Class>,val sharedPrefs: SharedP
             )
 
         holder.view.directZoom.setOnClickListener {
+            //Toast.makeText(it.context, "Opening " + link, Toast.LENGTH_SHORT).show()
+            Log.d("TAG", "onBindViewHolder: $link")
             if(link != null){
                 try {
                     val intent = Intent().setAction(Intent.ACTION_VIEW)

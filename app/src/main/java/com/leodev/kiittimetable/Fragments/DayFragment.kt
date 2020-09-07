@@ -35,6 +35,23 @@ class DayFragment : Fragment() {
         )
     }
 
+    override fun onStart() {
+        super.onStart()
+        val day = arguments?.getInt(ARG_DAY)
+        val timetable = arguments?.getSerializable(ARG_TIMETABLE)
+        val sharedPrefs = this.activity?.getSharedPreferences("zoom", Context.MODE_PRIVATE)
+
+        if (day == null || timetable == null) return
+
+        recycler.layoutManager = LinearLayoutManager(context)
+        recycler.adapter = ClassesAdapter(
+            day,
+            timetable as List<Class>,
+            sharedPrefs,
+            activity?.applicationContext
+        )
+    }
+
     companion object {
         val ARG_DAY = "day"
         val ARG_TIMETABLE = "timetable"
