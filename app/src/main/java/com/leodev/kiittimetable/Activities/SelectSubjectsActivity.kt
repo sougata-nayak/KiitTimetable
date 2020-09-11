@@ -65,6 +65,8 @@ class SelectSubjectsActivity : AppCompatActivity() {
         val email = auth.currentUser?.email!!
 
         getSubjectsList(year, branch)
+        val groupsSharedPref = getSharedPreferences("group", Context.MODE_PRIVATE)
+        val teacherSharedPref = getSharedPreferences("teacher", Context.MODE_PRIVATE)
 
         bt_make_timetable.setOnClickListener {
 
@@ -72,34 +74,21 @@ class SelectSubjectsActivity : AppCompatActivity() {
             progressBar.visibility = View.VISIBLE
             bt_make_timetable.visibility = View.INVISIBLE
 
-            for(views in rv_subjects){
+            for(t in subjects){
+                val subjectName= t?.sub
+                if (subjectName != null){
 
-                val radioButton : RadioButton = findViewById(views.rg_group.checkedRadioButtonId)
-                val sub = views.tv_subject_name.text.toString()
-                val group = radioButton.text.toString()
-                val teacher = views.sp_teacher.selectedItem.toString()
-                val g = TimetableSpecs(
-                    sub,
-                    group,
-                    teacher)
-                timetableSpecs.add(g)
+                    val sc = getSubjectCode(subjectName)
+                    val g = groupsSharedPref.getInt(sc, 0)
+                    val t = teacherSharedPref.getString(sc, null)
+                    val group = findViewById<RadioButton>(g).text.toString()
+
+                    val new = t?.let { it1 -> TimetableSpecs(subjectName, group, it1) }
+                    if (new != null) {
+                        timetableSpecs.add(new)
+                    }
+                }
             }
-
-//            for(i in 0 until rv_subjects.childCount){
-//
-//                val views = rv_subjects[i]
-//                val radioButton : RadioButton = findViewById(views.rg_group.checkedRadioButtonId)
-//
-//                val sub = views.tv_subject_name.text.toString()
-//                val group = radioButton.text.toString()
-//                val teacher = views.sp_teacher.selectedItem.toString()
-//                val g = TimetableSpecs(
-//                    sub,
-//                    group,
-//                    teacher
-//                )
-//                timetableSpecs.add(g)
-//            }
 
             Log.d("TAG", "onCreate: $timetableSpecs")
 
@@ -142,9 +131,24 @@ class SelectSubjectsActivity : AppCompatActivity() {
     }
 
     private fun setViews(subjects: Array<SubjectTeachers?>) {
+        val groupsSharedPref = getSharedPreferences("group", Context.MODE_PRIVATE)
+        val teacherSharedPref = getSharedPreferences("teacher", Context.MODE_PRIVATE)
+
+        for(subject in subjects){
+            if(subject != null){
+                val sc = getSubjectCode(subject.sub)
+                val teacher = teacherSharedPref.getString(sc, null)
+                if(teacher == null){
+                    teacherSharedPref.edit().apply {
+                        putString(sc, subject.teach[0])
+                        apply()
+                    }
+                }
+            }
+        }
 
         if (subjects.isNotEmpty()){
-            val adapter = SubjectsAdapter(subjects, this)
+            val adapter = SubjectsAdapter(subjects, this, groupsSharedPref, teacherSharedPref)
             rv_subjects.adapter = adapter
             rv_subjects.layoutManager = LinearLayoutManager(this)
 
@@ -236,4 +240,6 @@ class SelectSubjectsActivity : AppCompatActivity() {
             }
         })
     }
+
+
 }
