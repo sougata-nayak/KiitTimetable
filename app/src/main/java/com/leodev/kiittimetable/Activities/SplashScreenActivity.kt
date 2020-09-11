@@ -123,8 +123,7 @@ class SplashScreenActivity : AppCompatActivity() {
 
                 val timeTable = Gson().toJson(classDetails)
                 val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
-                val editor = sharedPref.edit()
-                editor.apply{
+                sharedPref.edit().apply{
                     putString("classes", timeTable)
                     apply()
                 }

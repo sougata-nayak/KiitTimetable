@@ -1,10 +1,7 @@
 package com.leodev.kiittimetable.Activities
 
 import android.Manifest
-import android.content.ContentValues
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -177,7 +174,15 @@ class MainActivity : AppCompatActivity() {
             "Get notified",
             DialogInterface.OnClickListener { dialog, id ->
                 try {
-                    saveEventsToCalendar()
+
+                    val calendarSharedPref = getSharedPreferences("calendar", Context.MODE_PRIVATE)
+                    val isEventAdded = calendarSharedPref.getBoolean("isEventAdded", false)
+                    if (isEventAdded){
+                        Toast.makeText(this, "Your timetable is already added to your calendar", Toast.LENGTH_SHORT).show()
+                    }
+                    else{
+                        saveEventsToCalendar()
+                    }
 
                 } catch (e: Exception) {
                     Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
@@ -228,6 +233,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val calendarSharedPref = getSharedPreferences("calendar", Context.MODE_PRIVATE)
+        calendarSharedPref.edit().apply {
+            putBoolean("isEventAdded", true)
+            apply()
+        }
         Toast.makeText(this, "Sync with calender success", Toast.LENGTH_SHORT)
             .show()
     }
