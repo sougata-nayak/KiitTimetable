@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.item_zoom_links.view.*
 
-class ZoomAdapter(val subjects: ArrayList<String>, val zoomSharedPrefs: SharedPreferences, val linksArray: MutableMap<String, String?>)
+class ZoomAdapter(val subjects: List<String>, val zoomSharedPrefs: SharedPreferences, val linksArray: MutableMap<String, String?>)
     : RecyclerView.Adapter<ZoomAdapter.ZoomViewHolder>()
 {
 

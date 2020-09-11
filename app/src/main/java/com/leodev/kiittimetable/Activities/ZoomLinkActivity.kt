@@ -3,12 +3,16 @@ package com.leodev.kiittimetable.Activities
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.leodev.kiittimetable.Adapters.ZoomAdapter
+import com.leodev.kiittimetable.Models.Class
 import com.leodev.kiittimetable.R
 import kotlinx.android.synthetic.main.activity_zoom_link.*
 
@@ -16,12 +20,7 @@ class ZoomLinkActivity : AppCompatActivity() {
 
     val db = Firebase.firestore
     val auth = FirebaseAuth.getInstance()
-    val subjects = arrayListOf("Data Algorithm and Analysis",
-        "Data Mining and Data Warehouse/Big Data",
-        "Software Engineering",
-        "Artificial Intelligence/Cryptography",
-        "Computer Networking",
-        "High Performance Computing")
+    val subjects: MutableSet<String> = mutableSetOf()
     val linksArray: MutableMap<String, String?> = mutableMapOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +34,21 @@ class ZoomLinkActivity : AppCompatActivity() {
             linksArray[sc] = t
         }
 
-        val adapter = ZoomAdapter(subjects, zoomSharedPrefs, linksArray)
+        val sharedPref = getSharedPreferences("timetable", Context.MODE_PRIVATE)
+        val jsonString = sharedPref.getString("classes", null)
+
+        val timetable : java.util.ArrayList<Class> = Gson().fromJson(
+            jsonString,
+            object : TypeToken<java.util.ArrayList<Class>>() {}.type
+        )
+
+        for(t in timetable){
+            t.name?.let { subjects.add(it) }
+        }
+        val sub = subjects.toList()
+        Log.d("TAG", "onCreate: $sub")
+
+        val adapter = ZoomAdapter(sub, zoomSharedPrefs, linksArray)
 
         rv_zoom_links.adapter = adapter
         rv_zoom_links.layoutManager = LinearLayoutManager(this)
