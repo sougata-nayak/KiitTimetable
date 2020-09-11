@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.leodev.kiittimetable.Adapters.ZoomAdapter
@@ -28,7 +29,6 @@ class ZoomLinkActivity : AppCompatActivity() {
         setContentView(R.layout.activity_zoom_link)
 
         val zoomSharedPrefs = getSharedPreferences("zoom", Context.MODE_PRIVATE)
-        val editor = zoomSharedPrefs.edit()
         for(sub in subjects){
             val sc = getSubjectCode(sub)
             val t = zoomSharedPrefs.getString(sc, null)
@@ -37,12 +37,19 @@ class ZoomLinkActivity : AppCompatActivity() {
 
         val adapter = ZoomAdapter(subjects, zoomSharedPrefs, linksArray)
 
-        //adapter.getSubjectCode("sdsdsd")
-
         rv_zoom_links.adapter = adapter
         rv_zoom_links.layoutManager = LinearLayoutManager(this)
 
         btn_zoom_links.setOnClickListener {
+            for(sub in subjects){
+                val subjectCode = getSubjectCode(sub)
+                val link = zoomSharedPrefs.getString(subjectCode, null)
+
+                val uid = auth.currentUser?.uid!!
+                val info = hashMapOf("link" to link)
+                val timetableDB = db.collection("users").document(uid).collection("timetable")
+                timetableDB.document(subjectCode).set(info, SetOptions.merge())
+            }
             finish()
         }
     }
