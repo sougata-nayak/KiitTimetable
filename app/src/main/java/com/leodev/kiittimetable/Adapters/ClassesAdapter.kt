@@ -27,11 +27,11 @@ class ClassesAdapter(val day: Int, classes: List<Class>,val sharedPrefs: SharedP
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = dataset[position]
         val subject = item.name.toString()
-        Log.d("TAG", "onBindViewHolder: $subject")
+        //Log.d("TAG", "onBindViewHolder: $subject")
         val code = getSubjectCode(subject)
-        Log.d("TAG", "onBindViewHolder: $code")
+        //Log.d("TAG", "onBindViewHolder: $code")
         val link = sharedPrefs?.getString(code, null)
-        Log.d("TAG", "onBindViewHolder: $link")
+        //Log.d("TAG", "onBindViewHolder: $link")
 
         holder.view.name.text = item.name ?: "?"
         holder.view.prof.text = item.prof ?: "?"
